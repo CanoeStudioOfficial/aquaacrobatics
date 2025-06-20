@@ -118,7 +118,7 @@ public class FogHandler {
                 float waterVision = ((IPlayerResizeable) playerEntity).getWaterVision();
                 fogEnd *= Math.max(0.25F, waterVision);
                 Biome biome = playerEntity.world.getBiome(playerEntity.getPosition());
-                if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WATER)) {
+                if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)) {
                     fogEnd *= 0.85F;
                 }
             }
