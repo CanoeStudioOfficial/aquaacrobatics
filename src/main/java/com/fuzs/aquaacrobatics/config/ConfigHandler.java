@@ -89,6 +89,10 @@ public class ConfigHandler {
         @Config.Name("New Water Fog")
         @Config.Comment("Use the new fog rendering in 1.13+.")
         public static boolean newWaterFog = true;
+
+        @Config.Name("New Water Fog Render Mode")
+        @Config.Comment("Water fog render mode, available options: AA_EXP2, VANILLA_LINEAR")
+        public static WaterFogMode waterFogMode = WaterFogMode.AA_EXP2;
     }
 
     public static class MiscellaneousConfig {
@@ -203,6 +207,10 @@ public class ConfigHandler {
     public enum PlayerBlockCollisions {
 
         STANDARD, APPROXIMATE, EXACT
+    }
+
+    public enum WaterFogMode {
+        AA_EXP2, VANILLA_LINEAR
     }
 
 }

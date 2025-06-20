@@ -71,6 +71,17 @@ public class FogHandler {
     
     @SubscribeEvent
     public void onRenderFogDensity(EntityViewRenderEvent.FogDensity event) {
+        switch (ConfigHandler.BlocksConfig.waterFogMode) {
+            case AA_EXP2:
+                handleExp2Fog(event);
+                break;
+            case VANILLA_LINEAR:
+                handleLinearFog(event);
+                break;
+        }
+    }
+
+    private void handleExp2Fog(EntityViewRenderEvent.FogDensity event) {
         Entity eventEntity = event.getEntity();
         if(eventEntity instanceof EntityLivingBase && ((EntityLivingBase)eventEntity).isPotionActive(MobEffects.BLINDNESS))
             return;
@@ -90,6 +101,35 @@ public class FogHandler {
             event.setCanceled(true);
         }
     }
+
+    // Based on Minecraft 1.21.6
+    private void handleLinearFog(EntityViewRenderEvent.FogDensity event) {
+        Entity eventEntity = event.getEntity();
+        if (eventEntity instanceof EntityLivingBase && ((EntityLivingBase) eventEntity).isPotionActive(MobEffects.BLINDNESS)) {
+            return;
+        }
+        if (event.getState().getMaterial() == Material.WATER && !shouldSkipFogOverride(eventEntity.getEntityWorld())) {
+            GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
+            float fogStart = -8.0F;
+            float fogEnd = 96.0F;
+
+            if (eventEntity instanceof EntityPlayer) {
+                EntityPlayer playerEntity = (EntityPlayer) eventEntity;
+                float waterVision = ((IPlayerResizeable) playerEntity).getWaterVision();
+                fogEnd *= Math.max(0.25F, waterVision);
+                Biome biome = playerEntity.world.getBiome(playerEntity.getPosition());
+                if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WATER)) {
+                    fogEnd *= 0.85F;
+                }
+            }
+
+            GlStateManager.setFogStart(fogStart);
+            GlStateManager.setFogEnd(fogEnd);
+            event.setCanceled(true);
+        }
+    }
+
+
 
     /* LOW to override mods like Biomes O' Plenty which force their own underwater fog color */
     @SubscribeEvent(priority = EventPriority.LOW)
