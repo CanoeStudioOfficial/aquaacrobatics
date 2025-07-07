@@ -5,6 +5,7 @@ import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
 import com.fuzs.aquaacrobatics.proxy.CommonProxy;
 import com.fuzs.aquaacrobatics.util.math.MathHelperNew;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -102,16 +103,20 @@ public class FogHandler {
         }
     }
 
-    // Based on Minecraft 1.21.6
+    // Based on Minecraft 1.21.7
+    static final float FOG_END = 96.0F;
+    static final float FOG_START = -8.0F;
     private void handleLinearFog(EntityViewRenderEvent.FogDensity event) {
         Entity eventEntity = event.getEntity();
         if (eventEntity instanceof EntityLivingBase && ((EntityLivingBase) eventEntity).isPotionActive(MobEffects.BLINDNESS)) {
             return;
         }
+
         if (event.getState().getMaterial() == Material.WATER && !shouldSkipFogOverride(eventEntity.getEntityWorld())) {
             GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
-            float fogStart = -8.0F;
-            float fogEnd = 96.0F;
+
+            float renderDistanceInBlocks = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16.0f;
+            float fogEnd = Math.min(renderDistanceInBlocks, FOG_END);
 
             if (eventEntity instanceof EntityPlayer) {
                 EntityPlayer playerEntity = (EntityPlayer) eventEntity;
@@ -123,7 +128,7 @@ public class FogHandler {
                 }
             }
 
-            GlStateManager.setFogStart(fogStart);
+            GlStateManager.setFogStart(FOG_START);
             GlStateManager.setFogEnd(fogEnd);
             event.setCanceled(true);
         }
