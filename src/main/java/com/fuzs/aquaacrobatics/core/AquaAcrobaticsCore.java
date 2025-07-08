@@ -2,7 +2,6 @@ package com.fuzs.aquaacrobatics.core;
 
 import com.fuzs.aquaacrobatics.AquaAcrobatics;
 import com.fuzs.aquaacrobatics.client.handler.NoMixinHandler;
-import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -38,13 +37,15 @@ public class AquaAcrobaticsCore implements IFMLLoadingPlugin {
     private static boolean isScreenRegistered;
     
     /* Config options */
-    public static boolean disableBlockUpdateMixins; 
+    public static boolean disableBlockUpdateMixins;
+    public static boolean enableSkyBoxHeightOverwrite;
     
     public AquaAcrobaticsCore() {
         SELF = this;
         Configuration config = new Configuration(new File("config", "aquaacrobatics_core.cfg"));
         config.load();
         disableBlockUpdateMixins = config.getBoolean("DisableBlockUpdateMixins", "hacks", false, "TickCentral has a buggy ASM transformer - this will disable these mixins from being applied. Make sure bubble columns are disabled if you use this.");
+        enableSkyBoxHeightOverwrite = config.getBoolean("EnableSkyBoxHeightOverwrite", "hacks", false, "Enable overwriting skybox renderer height, vanilla one may cause weird black edges near the chunk border.");
         config.save();
         
         isFgDev = "true".equals(System.getProperty("aquaacrobatics.fghack"));

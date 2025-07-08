@@ -33,6 +33,7 @@
     "client.ModelBipedMixin",
     "client.ModelFluidMixin",
     "client.RenderBoatMixin",
+    "client.RenderGlobalMixin",
     "client.RenderPlayerMixin",
     "client.PlayerControllerMPMixin"
   ],

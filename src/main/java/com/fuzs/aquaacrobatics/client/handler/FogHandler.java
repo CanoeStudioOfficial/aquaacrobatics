@@ -180,7 +180,7 @@ public class FogHandler {
             if (playerEntity.isPotionActive(MobEffects.BLINDNESS)) {
                 int potionDuration = playerEntity.getActivePotionEffect(MobEffects.BLINDNESS).getDuration();
                 if (potionDuration < 20) {
-                    blindnessFactor *= (1.0F - (float)i / 20.0F);
+                    blindnessFactor *= (1.0F - (float)potionDuration / 20.0F);
                 } else {
                     blindnessFactor = 0.0D;
                 }

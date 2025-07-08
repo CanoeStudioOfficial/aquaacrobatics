@@ -36,6 +36,14 @@ public class AquaAcrobaticsMixinPlugin implements IMixinConfigPlugin {
             }
         }
 
+        if (mixinClassName.equals("com.fuzs.aquaacrobatics.core.mixin.client.RenderGlobalMixin")) {
+            if (!AquaAcrobaticsCore.enableSkyBoxHeightOverwrite) {
+                return false;
+            }
+            AquaAcrobaticsCore.LOGGER.error("Overwriting vanilla skybox height as requested in config.");
+            return true;
+        }
+
         if(mixinClassName.equals("com.fuzs.aquaacrobatics.core.mixin.client.BlockAliasesBubbleColumnMixin")) {
             return doesClassExist("optifine.OptiFineForgeTweaker");
         }
